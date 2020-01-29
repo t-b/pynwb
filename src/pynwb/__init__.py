@@ -245,6 +245,15 @@ class NWBHDF5IO(_HDF5IO):
                 manager = get_manager()
         super(NWBHDF5IO, self).__init__(path, manager=manager, mode=mode, file=file_obj, comm=comm)
 
+    def read(self, **kwargs):
+
+        nwbfile = super().read(**kwargs)
+
+        if self.mode != 'r':
+            nwbfile._appendModificationEntry()
+
+        return nwbfile
+
 
 from . import io as __io  # noqa: F401,E402
 from .core import NWBContainer, NWBData  # noqa: F401,E402
